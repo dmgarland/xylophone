@@ -9,6 +9,8 @@ var phase = 0.0
 var playback: AudioStreamPlayback = null
 var amp = Vector2.ONE
 
+signal note_ended
+
 func _fill_buffer():	
 	var increment = pulse_hz / sample_hz
 	var to_fill = playback.get_frames_available()
@@ -29,12 +31,14 @@ func _process(delta):
 	_fill_buffer()
 	
 	if $Player.playing:
-		if amp.x < 0.01:			
-			$Player.stop()
+		if amp.x < 0.01:
+			$Player.stop()			
+			emit_signal('note_ended')
+			#queue_free()
+			
 		else:			
 			amp = amp.linear_interpolate(Vector2.ZERO, delta)
 
 func sound():
 	if !$Player.playing:
 		$Player.play()
-
