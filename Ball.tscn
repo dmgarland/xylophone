@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Camera.gd" type="Script" id=1]
+[ext_resource path="res://collide.gd" type="Script" id=2]
+
+[sub_resource type="PhysicsMaterial" id=2]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.5
+
+[node name="Ball" type="Spatial"]
+
+[node name="RigidBody" type="RigidBody" parent="."]
+physics_material_override = SubResource( 2 )
+contacts_reported = 1
+contact_monitor = true
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
+shape = SubResource( 1 )
+
+[node name="CSGSphere" type="CSGSphere" parent="RigidBody/CollisionShape"]
+radius = 0.5
+rings = 8
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -1.62921e-07, -0.707107, 0.707107, 0, 0.707107, 0.707107, -1, 1.15203e-07, -1.15203e-07, 20, 10, 10 )
+current = true
+script = ExtResource( 1 )
+[connection signal="body_entered" from="RigidBody" to="RigidBody" method="_on_RigidBody_body_entered"]
