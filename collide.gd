@@ -17,4 +17,5 @@ func _ready():
 
 
 func _on_RigidBody_body_entered(body):
-	body.sound()
+	if body is CSGCombiner:
+		body.sound(self)
