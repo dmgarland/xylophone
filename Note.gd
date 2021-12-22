@@ -1,4 +1,4 @@
-extends CSGBox
+extends CSGCombiner
 
 const ref_freq = 440.0
 const A = pow(2.0, 1.0 / 12.0)
@@ -22,23 +22,24 @@ func _fill_buffer():
 		
 func _ready():	
 	pulse_hz = ref_freq * pow(A, steps)
-	width = steps + 40
-	$Player.stream.mix_rate = sample_hz
-	playback = $Player.get_stream_playback()
+	$note.width = 24 - steps
+	$player.stream.mix_rate = sample_hz
+	playback = $player.get_stream_playback()
 	_fill_buffer()
+	
 	
 func _process(delta):
 	_fill_buffer()
 	
-	if $Player.playing:
+	if $player.playing:
 		if amp.x < 0.01:
-			$Player.stop()			
+			$player.stop()			
 			emit_signal('note_ended')
-			#queue_free()
+			queue_free()
 			
 		else:			
 			amp = amp.linear_interpolate(Vector2.ZERO, delta)
 
 func sound():
-	if !$Player.playing:
-		$Player.play()
+	if !$player.playing:
+		$player.play()

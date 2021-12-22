@@ -18,8 +18,8 @@ func _ready():
 func add_note():
 	var note = Note.instance()
 	note.steps = r.randi_range(-12, 12)
-	var y: float = notes_played * note.height
-	var z: float = notes_played * note.depth	
+	var y: float = (notes_played * 2)
+	var z: float = notes_played * 6
 	note.translate(Vector3(0, -y, z))
 	note.rotate_x(deg2rad(12))
 	note.connect("note_ended", self, "add_note")
