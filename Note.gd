@@ -5,6 +5,7 @@ const A = pow(2.0, 1.0 / 12.0)
 export var sample_hz = 22050.0
 export var steps = 0
 export var polyphony = 1
+export var beats = 1
 var pulse_hz
 var notes: Array
 var bodies = {}
@@ -22,21 +23,23 @@ func _fill_buffer(note):
 		note['phase'] = fmod(note['phase'] + increment, 1.0)
 		to_fill -= 1
 		
+func width():
+	return $note.depth + $slope_left/box.depth
+		
 func _ready():	
 	pulse_hz = ref_freq * pow(A, steps)
-	$note.width = 24 - steps
-	AudioServer.lock()
+	$note.width = (24 - steps)
+	$note.depth = $note.depth * (beats + 0.75)
+	translate(Vector3(0, 0, $note.depth / 2))
 	
-	for i in range(polyphony):
-		var player = AudioStreamPlayer3D.new()
-		AudioServer.add_bus()
-		var bus = AudioServer.bus_count - 1
-		var name = "Bus %s" % bus
-		AudioServer.set_bus_name(bus, name)
-		AudioServer.set_bus_send(bus, "Master")
+	$slope_left.translate(Vector3(0, 0, ($note.depth / 2 - $slope_left/box.depth / 2)))
+	$slope_right.translate(Vector3(0, 0, ($note.depth / 2 - $slope_right/box.depth / 2)))
+	
+	for _i in range(polyphony):
+		var player = AudioStreamPlayer3D.new()		
 		player.stream = AudioStreamGenerator.new()
 		player.stream.mix_rate = sample_hz
-		player.bus = name	
+		
 		var note = {
 			'player': player,
 			'amp': Vector2.ONE,
@@ -46,34 +49,32 @@ func _ready():
 		_fill_buffer(note)
 		notes.append(note)
 		add_child(player)
-		
-	AudioServer.unlock()
 	
 func _process(delta):
 	var ended = true
 		
 	for note in notes:
 		if note['player'].playing:
-			_fill_buffer(note)
-			
-			if note['amp'].x < 0.01:
+			if note['amp'].x < 0.05:
 				note['player'].stop()
 				note['ended'] = true
-			else:			
+			else:
+				_fill_buffer(note)
 				note['amp'] = note['amp'].linear_interpolate(Vector2.ZERO, delta)
 			
 		ended = ended && note['ended']
 			
 	if bodies.size() > 0 && ended:
-		print('ending note')
+		#print('ending note')
 		emit_signal('note_ended')
 		queue_free()
 
-func sound(body):	
-	if !bodies.has(body):			
+func sound(body):
+	if !bodies.has(body):
 		var note = notes[bodies.size()]		
 		bodies[body] = note		
 		if !note['player'].playing:
 			#print(note)
+			note['player'].bus = body.busName()
 			note['player'].play()
 			started = true

@@ -1,21 +1,17 @@
 extends RigidBody
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	AudioServer.lock()
+	AudioServer.add_bus()
+	var bus = AudioServer.bus_count - 1
+	AudioServer.set_bus_name(bus, busName())
+	AudioServer.set_bus_send(bus, "Master")
+	AudioServer.unlock()
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
-
+func busName():
+	return "sphere-%s" % get_instance_id()
 
 func _on_RigidBody_body_entered(body):
 	if body is CSGCombiner:
 		body.sound(self)
+
