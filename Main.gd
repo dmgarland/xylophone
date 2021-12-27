@@ -17,7 +17,7 @@ func _ready():
 		
 	for i in range(polyphony):
 		var sphere = Ball.instance()	
-		sphere.translate(Vector3(-3 + i * 2, 10 + i, 1))
+		sphere.translate(Vector3(-3 + i * 2, 10 + i * 2, 3))
 		add_child(sphere)
 		spheres.append(sphere)
 		
@@ -28,14 +28,15 @@ func add_note():
 	var note = Note.instance()
 	note.polyphony = polyphony
 	note.steps = r.randi_range(-12, 12)
-	note.beats = r.randi_range(1, 8) * 0.25
+	note.beats = r.randi_range(2, 12)
 	var y: float = (notes_played * 2)
-	note.translate(Vector3(0, -y, z))
-	note.rotate_x(deg2rad(12))
+	
 	note.connect("note_ended", self, "add_note")
-	add_child(note)
-	z += note.width()
+	var resized = note.resize_and_translate(y, z)
+	add_child(resized)	
+	z+=resized.width()
 	notes_played += 1
+	
 	
 func _process(_delta):
 	var target = Vector3.ZERO

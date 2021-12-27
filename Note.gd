@@ -24,16 +24,29 @@ func _fill_buffer(note):
 		to_fill -= 1
 		
 func width():
-	return $note.depth + $slope_left/box.depth
+	return $note.depth + $slopes/slope_left/box.depth
+	
+func resize_and_translate(y, z):
+	$note.width = (24 - steps)	
+	print(beats)
+	$note.depth = beats
+	#print("block width is %s", $note.depth)
+	$note.translate(Vector3(0, -y  * 0.7, z + $note.depth / 2.0))
+	#print("and the notes %s", $note.depth / 2.0)
+	#print("so i'll move the slopes %s", $note.depth + $slopes/slope_left/box.depth / 2)
+	$slopes.translate(Vector3(0, -y  * 0.7, z + ($note.depth + $slopes/slope_left/box.depth / 2)))
+	
+	#print('====')
+	
+	rotate_x(deg2rad(12))
+	#translate(Vector3(0, -y, 0))
+	#print(z)
+	
+	#print(width())
+	return self
 		
 func _ready():	
 	pulse_hz = ref_freq * pow(A, steps)
-	$note.width = (24 - steps)
-	$note.depth = $note.depth * (beats + 0.75)
-	translate(Vector3(0, 0, $note.depth / 2))
-	
-	$slope_left.translate(Vector3(0, 0, ($note.depth / 2 - $slope_left/box.depth / 2)))
-	$slope_right.translate(Vector3(0, 0, ($note.depth / 2 - $slope_right/box.depth / 2)))
 	
 	for _i in range(polyphony):
 		var player = AudioStreamPlayer3D.new()		
