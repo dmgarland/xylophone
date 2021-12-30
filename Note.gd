@@ -4,7 +4,6 @@ const ref_freq = 440.0
 const A = pow(2.0, 1.0 / 12.0)
 export var sample_hz = 22050.0
 export var steps = 0
-export var polyphony = 1
 export var beats = 1
 var pulse_hz
 var notes: Array
@@ -27,14 +26,13 @@ func width():
 	return $note.depth + $slopes/slope_left/box.depth
 	
 func resize_and_translate(y, z):
-	$note.width = (24 - steps)	
-	print(beats)
+	$note.width = (24 - steps) * 1.5
 	$note.depth = beats
 	#print("block width is %s", $note.depth)
-	$note.translate(Vector3(0, -y  * 0.7, z + $note.depth / 2.0))
+	$note.translate(Vector3(0, -y, z + $note.depth / 2.0))
 	#print("and the notes %s", $note.depth / 2.0)
 	#print("so i'll move the slopes %s", $note.depth + $slopes/slope_left/box.depth / 2)
-	$slopes.translate(Vector3(0, -y  * 0.7, z + ($note.depth + $slopes/slope_left/box.depth / 2)))
+	$slopes.translate(Vector3(0, -y, z + ($note.depth + $slopes/slope_left/box.depth / 2)))
 	
 	#print('====')
 	
@@ -48,7 +46,7 @@ func resize_and_translate(y, z):
 func _ready():	
 	pulse_hz = ref_freq * pow(A, steps)
 	
-	for _i in range(polyphony):
+	for _i in range(Global.polyphony):
 		var player = AudioStreamPlayer3D.new()		
 		player.stream = AudioStreamGenerator.new()
 		player.stream.mix_rate = sample_hz

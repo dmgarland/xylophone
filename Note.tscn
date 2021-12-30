@@ -20,12 +20,12 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0 )
 
 [node name="sheared" type="CSGBox" parent="slopes/slope_left"]
 transform = Transform( 1, -10, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-width = 8.0
+width = 12.0
 depth = 4.0
 
 [node name="box" type="CSGBox" parent="slopes/slope_left"]
 operation = 1
-width = 8.0
+width = 12.0
 depth = 4.0
 
 [node name="slope_right" type="CSGCombiner" parent="slopes"]
@@ -33,10 +33,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0 )
 
 [node name="sheared" type="CSGBox" parent="slopes/slope_right"]
 transform = Transform( 1, 10, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-width = 8.0
+width = 12.0
 depth = 4.0
 
 [node name="box" type="CSGBox" parent="slopes/slope_right"]
 operation = 1
-width = 8.0
+width = 12.0
 depth = 4.0

@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://MainMenu.gd" type="Script" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+main_scene = "res://Main.tscn"
+
+[node name="Label" type="Label" parent="."]
+margin_right = 243.0
+margin_bottom = 50.0
+text = "Welcome to my amazing composition"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Polyphony" type="SpinBox" parent="."]
+margin_left = 100.0
+margin_top = 100.0
+margin_right = 174.0
+margin_bottom = 124.0
+rect_scale = Vector2( 1.98666, 2.47586 )
+min_value = 1.0
+max_value = 8.0
+value = 2.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="."]
+margin_left = 400.0
+margin_top = 100.0
+margin_right = 441.0
+margin_bottom = 120.0
+rect_scale = Vector2( 1.92104, 2.46793 )
+text = "Start"
