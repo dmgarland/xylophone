@@ -1,9 +1,23 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Note.gd" type="Script" id=1]
+[ext_resource path="res://texture_wood.png" type="Texture" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.933333, 0.796078, 0.0431373, 1 )
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="SpatialMaterial" id=2]
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="SpatialMaterial" id=4]
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_texture = ExtResource( 2 )
 
 [node name="note_container" type="CSGCombiner"]
 use_collision = true
@@ -22,11 +36,13 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 0 )
 transform = Transform( 1, -10, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 width = 12.0
 depth = 4.0
+material = SubResource( 2 )
 
 [node name="box" type="CSGBox" parent="slopes/slope_left"]
 operation = 1
 width = 12.0
 depth = 4.0
+material = SubResource( 3 )
 
 [node name="slope_right" type="CSGCombiner" parent="slopes"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0 )
@@ -35,8 +51,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0 )
 transform = Transform( 1, 10, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 width = 12.0
 depth = 4.0
+material = SubResource( 4 )
 
 [node name="box" type="CSGBox" parent="slopes/slope_right"]
 operation = 1
 width = 12.0
 depth = 4.0
+material = SubResource( 5 )

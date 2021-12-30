@@ -15,6 +15,7 @@ func _ready():
 		add_note()
 		
 	$start_slope/shear.height = Global.polyphony
+	$start_slope.translate(Vector3(0, 0, -(Global.polyphony / 2)))
 	
 	for i in range(Global.polyphony):
 		var sphere = Ball.instance()		
@@ -31,7 +32,7 @@ func add_note():
 	note.beats = r.randi_range(2, 12)
 	var y: float = (notes_played * 1.4)
 	
-	note.connect("note_ended", self, "add_note")
+	note.connect("note_started", self, "add_note")
 	var resized = note.resize_and_translate(y, z)
 	add_child(resized)	
 	z+=resized.width()
@@ -55,9 +56,7 @@ func _process(_delta):
 		
 	if spheres.size() == 0:
 		Global.load_new_scene(menu_scene)
-	
-		
-			
+
 	target = target / spheres.size()
 	var diff = max_z - min_z
 	var zoom = Vector3(diff * 0.5, 10, diff * 0.5) + Vector3.ONE

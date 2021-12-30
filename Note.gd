@@ -10,6 +10,7 @@ var notes: Array
 var bodies = {}
 var started = false
 
+signal note_started
 signal note_ended
 
 func _fill_buffer(note):	
@@ -89,3 +90,4 @@ func sound(body):
 			note['player'].bus = body.busName()
 			note['player'].play()
 			started = true
+			emit_signal("note_started")

@@ -14,8 +14,8 @@ menu_scene = "res://MainMenu.tscn"
 use_collision = true
 
 [node name="shear" type="CSGBox" parent="start_slope"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, -2, 1, 0, 4, -5 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, -2, 1, 0, 1, 0 )
 operation = 1
 width = 5.0
-height = 5.0
+height = 1.0
 depth = 0.2

@@ -6,6 +6,6 @@ export (String, FILE) var main_scene
 func _ready():
 	$Button.connect("pressed", self, "start")
 
-func start():	
+func start():
 	Global.polyphony = $Polyphony.value
 	Global.load_new_scene(main_scene)
