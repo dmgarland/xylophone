@@ -8,10 +8,9 @@ export var beats = 1
 var pulse_hz
 var notes: Array
 var bodies = {}
-var started = false
 
 signal note_started
-signal note_ended
+#signal note_ended
 
 func _fill_buffer(note):	
 	var increment = pulse_hz / sample_hz
@@ -29,19 +28,10 @@ func width():
 func resize_and_translate(y, z):
 	$note.width = (24 - steps) * 1.5
 	$note.depth = beats
-	#print("block width is %s", $note.depth)
 	$note.translate(Vector3(0, -y, z + $note.depth / 2.0))
-	#print("and the notes %s", $note.depth / 2.0)
-	#print("so i'll move the slopes %s", $note.depth + $slopes/slope_left/box.depth / 2)
 	$slopes.translate(Vector3(0, -y, z + ($note.depth + $slopes/slope_left/box.depth / 2)))
-	
-	#print('====')
-	
 	rotate_x(deg2rad(12))
-	#translate(Vector3(0, -y, 0))
-	#print(z)
 	
-	#print(width())
 	return self
 		
 func _ready():	
@@ -61,10 +51,15 @@ func _ready():
 		_fill_buffer(note)
 		notes.append(note)
 		add_child(player)
+		
+func reap():
+	var playing = false
+	for note in notes:
+		playing = playing || note['player'].playing
+	if !playing:
+		queue_free()
 	
 func _process(delta):
-	var ended = true
-		
 	for note in notes:
 		if note['player'].playing:
 			if note['amp'].x < 0.05:
@@ -73,13 +68,6 @@ func _process(delta):
 			else:
 				_fill_buffer(note)
 				note['amp'] = note['amp'].linear_interpolate(Vector2.ZERO, delta)
-			
-		ended = ended && note['ended']
-			
-	if bodies.size() > 0 && ended:
-		#print('ending note')
-		emit_signal('note_ended')
-		queue_free()
 
 func sound(body):
 	if !bodies.has(body):
@@ -89,5 +77,4 @@ func sound(body):
 			#print(note)
 			note['player'].bus = body.busName()
 			note['player'].play()
-			started = true
 			emit_signal("note_started")
