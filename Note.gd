@@ -62,12 +62,12 @@ func reap():
 func _process(delta):
 	for note in notes:
 		if note['player'].playing:
-			if note['amp'].x < 0.05:
+			if note['amp'].x < 0.01:
 				note['player'].stop()
 				note['ended'] = true
 			else:
 				_fill_buffer(note)
-				note['amp'] = note['amp'].linear_interpolate(Vector2.ZERO, delta)
+				note['amp'] = note['amp'].linear_interpolate(Vector2.ZERO, delta * 1.5)
 
 func sound(body):
 	if !bodies.has(body):
