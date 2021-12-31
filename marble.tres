@@ -1,0 +1,14 @@
+[gd_resource type="SpatialMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://marble_albedo.png" type="Texture" id=1]
+
+[resource]
+params_diffuse_mode = 2
+albedo_texture = ExtResource( 1 )
+metallic = 0.1
+roughness = 0.1
+rim_enabled = true
+rim = 1.0
+rim_tint = 1.0
+subsurf_scatter_enabled = true
+subsurf_scatter_strength = 0.1

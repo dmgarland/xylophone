@@ -33,9 +33,9 @@ func add_note():
 	var y: float = (notes_played * 1.4)
 	
 	note.connect("note_started", self, "add_note")
-	var resized = note.resize_and_translate(y, z)
-	add_child(resized)	
-	z+=resized.width()
+	note.resize_and_translate(y, z)
+	add_child(note)	
+	z+=note.width()
 	notes_played += 1
 	
 	
