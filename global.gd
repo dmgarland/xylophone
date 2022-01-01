@@ -2,6 +2,7 @@ extends Node
 
 # Declare member variables here. Examples:
 var polyphony = 2;
+var score_path: String
 
 func _ready():
 	pass

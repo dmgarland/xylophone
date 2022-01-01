@@ -2,6 +2,8 @@ extends Node
 export (PackedScene) var Note
 export (PackedScene) var Ball
 export (String, FILE) var menu_scene
+
+const Sequencer = preload("sequencer.gd")
 	
 var r = RandomNumberGenerator.new()
 var notes_played = 0;
@@ -9,10 +11,13 @@ var camera: Camera
 var spheres = []
 var z = 0.0
 var reaper: Timer
+var sequence: Sequencer
 
 func _ready():
 	r.randomize()
-	for _i in range(4):
+	
+	sequence = Sequencer.new(Global.score_path)
+	for i in range(4):
 		add_note()
 		
 	$start_slope/shear.height = Global.polyphony
@@ -35,16 +40,18 @@ func _ready():
 	add_child(reaper)
 	
 func add_note():
-	var note = Note.instance()
-	note.steps = r.randi_range(-12, 12)
-	note.beats = r.randi_range(2, 12)
-	var y: float = (notes_played * 1.4)
-	
-	note.connect("note_started", self, "add_note")
-	note.resize_and_translate(y, z)
-	$notes.add_child(note)	
-	z+=note.width()
-	notes_played += 1
+	sequence._iter_next(null)
+	if sequence.current:
+		var note = Note.instance()
+		note.steps = sequence.current.steps
+		note.beats = sequence.current.duration
+		var y: float = (notes_played * 1.4)
+		
+		note.connect("note_started", self, "add_note")
+		note.resize_and_translate(y, z)
+		$notes.add_child(note)	
+		z+=note.width()
+		notes_played += 1
 
 func get_sphere_bounds(): 
 	var bounds = spheres[0].get_child(0).get_child(0).get_transformed_aabb()
