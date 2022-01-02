@@ -12,8 +12,10 @@ __meta__ = {
 main_scene = "res://Main.tscn"
 
 [node name="Label" type="Label" parent="."]
-margin_right = 243.0
-margin_bottom = 50.0
+margin_left = 386.046
+margin_top = 14.1582
+margin_right = 629.046
+margin_bottom = 64.1582
 text = "Welcome to my amazing composition"
 align = 1
 __meta__ = {
@@ -48,19 +50,22 @@ margin_right = 368.0
 margin_bottom = 568.0
 window_title = "Open a File"
 mode = 0
-filters = PoolStringArray( "*.txt" )
+filters = PoolStringArray( "*.csv" )
 show_hidden_files = true
 current_dir = "res://scores"
-current_file = "dmaj.txt"
-current_path = "res://scores/dmaj.txt"
+current_file = "final.csv"
+current_path = "res://scores/final.csv"
 
 [node name="SelectedFile" type="Label" parent="."]
-margin_left = 137.152
+margin_left = 134.32
 margin_top = 226.346
-margin_right = 374.152
+margin_right = 371.32
 margin_bottom = 271.346
 text = "example.csv
 "
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ChangeFile" type="Button" parent="."]
 margin_left = 392.0
@@ -68,6 +73,9 @@ margin_top = 216.0
 margin_right = 534.0
 margin_bottom = 261.0
 text = "Change File"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SelectedFilePrefix" type="Label" parent="."]
 margin_left = 39.2001

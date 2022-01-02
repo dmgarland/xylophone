@@ -26,6 +26,7 @@ Ball = ExtResource( 4 )
 menu_scene = "res://MainMenu.tscn"
 
 [node name="start_slope" type="CSGCombiner" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1 )
 use_collision = true
 
 [node name="shear" type="CSGBox" parent="start_slope"]

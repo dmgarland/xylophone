@@ -3,8 +3,11 @@ extends CSGCombiner
 const ref_freq = 440.0
 const A = pow(2.0, 1.0 / 12.0)
 export var sample_hz = 22050.0
-export var steps = 0
+export var steps = 20
 export var beats = 1
+export var angle = 12
+export var height: float
+export var width: float
 var pulse_hz
 var notes: Array
 var bodies = {}
@@ -22,18 +25,16 @@ func _fill_buffer(note):
 		note['phase'] = fmod(note['phase'] + increment, 1.0)
 		to_fill -= 1
 		
-func width():
-	return $note.depth + $slopes/slope_left/box.depth
-	
-func resize_and_translate(y, z):
+func resize_and_translate(y, z):	
 	$note.width = (24 - steps) * 1.5
 	$note.depth = beats
-	$note.translate(Vector3(0, -y, z + $note.depth / 2.0))
-	$slopes.translate(Vector3(0, -y, z + ($note.depth + $slopes/slope_left/box.depth / 2)))
-	rotate_x(deg2rad(12))
+	self.width = $note.depth + $slopes/slope_left/box.depth
+	self.height = (sin(deg2rad(angle)) * self.width) + ($note.height / sin(deg2rad(90 - angle)))
 	
-	return self
-		
+	$slopes.translate(Vector3(0, 0, self.width * 0.5))
+	translate(Vector3(0, -(y + self.height / 2), $note.depth / 2.0 + z))
+	rotate_x(deg2rad(angle))
+					
 func _ready():	
 	pulse_hz = ref_freq * pow(A, steps)
 	
@@ -41,6 +42,7 @@ func _ready():
 		var player = AudioStreamPlayer3D.new()		
 		player.stream = AudioStreamGenerator.new()
 		player.stream.mix_rate = sample_hz
+		player.unit_db = 12.0
 		
 		var note = {
 			'player': player,
@@ -51,7 +53,7 @@ func _ready():
 		_fill_buffer(note)
 		notes.append(note)
 		add_child(player)
-		
+	
 func reap():
 	var playing = false
 	for note in notes:
@@ -70,11 +72,12 @@ func _process(delta):
 				note['amp'] = note['amp'].linear_interpolate(Vector2.ZERO, delta * 1.5)
 
 func sound(body):
+	if bodies.size() == 0:
+		emit_signal("note_started")
 	if !bodies.has(body):
-		var note = notes[bodies.size()]		
-		bodies[body] = note		
+		var note = notes[bodies.size()]	
+		bodies[body] = note			
 		if !note['player'].playing:
 			#print(note)
 			note['player'].bus = body.busName()
-			note['player'].play()
-			emit_signal("note_started")
+			note['player'].play()			

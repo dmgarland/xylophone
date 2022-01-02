@@ -9,15 +9,18 @@ var r = RandomNumberGenerator.new()
 var notes_played = 0;
 var camera: Camera
 var spheres = []
+var y = 0.0
 var z = 0.0
 var reaper: Timer
 var sequence: Sequencer
+var clock: Timer
+var run_time = 0
 
 func _ready():
 	r.randomize()
 	
 	sequence = Sequencer.new(Global.score_path)
-	for i in range(4):
+	for i in range(10):
 		add_note()
 		
 	$start_slope/shear.height = Global.polyphony
@@ -39,21 +42,37 @@ func _ready():
 	reaper.connect("timeout", self, "reap_notes")
 	add_child(reaper)
 	
+	clock = Timer.new()
+	clock.autostart = true
+	clock.wait_time = 1.0
+	clock.connect("timeout", self, "add_second")
+	add_child(clock)
+	
+func add_second():
+	run_time += 1
+	var minutes = run_time / 60
+	var seconds = run_time % 60
+	print("%s:%s" % [minutes, seconds])
+	
 func add_note():
 	sequence._iter_next(null)
+	
 	if sequence.current:
 		var note = Note.instance()
 		note.steps = sequence.current.steps
 		note.beats = sequence.current.duration
-		var y: float = (notes_played * 1.4)
+		note.angle = sequence.current.angle		
 		
 		note.connect("note_started", self, "add_note")
+		print('adding note at (%f,%f)' %[y, z])
 		note.resize_and_translate(y, z)
-		$notes.add_child(note)	
-		z+=note.width()
+		$notes.add_child(note)
+		
+		y += note.height
+		z += note.width
 		notes_played += 1
 
-func get_sphere_bounds(): 
+func get_sphere_bounds():
 	var bounds = spheres[0].get_child(0).get_child(0).get_transformed_aabb()
 	for i in range(1, spheres.size()):
 		var sphere = spheres[i]		
@@ -84,27 +103,18 @@ func find_z_bounds():
 	return [min_z, max_z, target]
 	
 func _process(delta):
-	
 	var bounds = find_z_bounds()
 	var min_z = bounds[0];
 	var max_z = bounds[1];
 	var target = bounds[2];
-	#var bounds = get_sphere_bounds()
-	#var min_z = bounds.position.z
-	#var max_z = bounds.end.z
-	#var target = bounds.end / spheres.size() as float
-			
+
 	if spheres.size() == 0:
 		Global.load_new_scene(menu_scene)
 
 	target = target / spheres.size()
-	#var diff = bounds.size.z
+
 	var diff = max_z - min_z
-	var zoom = Vector3(diff * 0.5, 10, diff * 0.5) + Vector3.ONE
-	#camera.look_at_from_position((target + zoom), target, Vector3(0, 1, 0))
-	#camera.transform.interpolate_with(target, cam_speed * _delta)
-	#camera.look_at(target, Vector3(0, 1, 0))
-	#camera.translation = camera.translation.linear_interpolate(target, t)
+	var zoom = Vector3(diff * 0.5, 10, diff * 0.5) + Vector3.ONE	
 	var T = camera.global_transform.looking_at(target, Vector3(0, 1, 0))
 	
 	camera.global_transform.origin.x = lerp(camera.global_transform.origin.x, (target + zoom).x, delta)
