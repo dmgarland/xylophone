@@ -28,7 +28,7 @@ func _ready():
 	
 	for i in range(Global.polyphony):
 		var sphere = Ball.instance()		
-		sphere.translate(Vector3(0, 10, -i))
+		sphere.translate(Vector3(0, 10, -(i+1)))
 		add_child(sphere)
 		spheres.append(sphere)
 		
@@ -63,8 +63,7 @@ func add_note():
 		note.beats = sequence.current.duration
 		note.angle = sequence.current.angle		
 		
-		note.connect("note_started", self, "add_note")
-		print('adding note at (%f,%f)' %[y, z])
+		note.connect("note_started", self, "add_note")		
 		note.resize_and_translate(y, z)
 		$notes.add_child(note)
 		
