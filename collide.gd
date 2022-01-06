@@ -21,7 +21,7 @@ func busName():
 	return "sphere-%s" % get_instance_id()
 
 func _on_RigidBody_body_entered(body):
-	bomb.start(3.0)	
+	bomb.start(5.0)	
 	if body.has_method("sound"):
 		body.sound(self)
 
