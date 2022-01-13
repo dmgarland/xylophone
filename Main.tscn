@@ -34,7 +34,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -1 )
 [node name="CollisionShape" type="CollisionShape" parent="start_slope"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, -2, 1, 0, 2, -1 )
 shape = SubResource( 3 )
-disabled = true
 
 [node name="shear" type="CSGBox" parent="start_slope/CollisionShape"]
 operation = 1
