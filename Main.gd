@@ -23,7 +23,7 @@ func _ready():
 	for i in range(20):
 		add_note()
 		
-	$start_slope/shear.height = Global.polyphony
+	#$start_slope/CollisionShape.height = Global.polyphony
 	$start_slope.translate(Vector3(0, 0, -(Global.polyphony / 2)))
 	
 	for i in range(Global.polyphony):
