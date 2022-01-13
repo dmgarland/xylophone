@@ -20,7 +20,7 @@ func _ready():
 	r.randomize()
 	
 	sequence = Sequencer.new(Global.score_path)
-	for i in range(10):
+	for i in range(20):
 		add_note()
 		
 	$start_slope/shear.height = Global.polyphony
